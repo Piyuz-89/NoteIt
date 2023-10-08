@@ -1,12 +1,12 @@
 const router = require("express").Router();
 
-const { getNotes, addNote, updateNote, deleteNote } = require("../controllers/noteCtrl");
+const { getAllNotes, addNote, getNote, updateNote, deleteNote } = require("../controllers/noteCtrl");
 
 const auth = require("../middleware/auth");
 
 router.route("/")
-    .get(auth, getNotes)
-    .put(auth, addNote);
+    .get(auth, getAllNotes)
+    .post(auth, addNote);
 
 
 router.route("/:id")
