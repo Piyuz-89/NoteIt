@@ -8,7 +8,7 @@ const registerUser = async (req, res) =>{
         const {name, email, password} = req.body;
         const user = User.findOne({email: email});
         if(user){
-            return res.json(400).json({msg: "Email already exist"});
+            return res.status(400).json({msg: "Email already exist"});
         }
 
         const hashpass = await bcrypt.hash(password, 10);
@@ -28,7 +28,9 @@ const registerUser = async (req, res) =>{
 const loginUser = async (req, res) =>{
     try{
         const {email, password} = req.body;
+
         const user = await User.findOne({email: email});
+
         if(!user){
             return res.status(400).json({msg:"User does not exist"});
         }
@@ -42,6 +44,7 @@ const loginUser = async (req, res) =>{
         const token = jwt.sign(payload, process.env.TOKEN_SECRET, {expiresIn: "1d"});
 
         res.json({token});
+        
     }catch(err){
         res.status(400).json({msg: err.message});
     }
