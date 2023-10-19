@@ -16,11 +16,11 @@ app.use(express.json());
 
 connectDB();
 
-app.use("/user",userRouter);
+app.use("/api/user",userRouter);
 
 app.use("/api/notes",noteRouter);
 
 
-app.listen(process.env.PORT , ()=>{
+app.listen(process.env.PORT || 3000, ()=>{
     console.log("Server started on port 3000");
 });

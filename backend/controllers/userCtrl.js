@@ -43,7 +43,7 @@ const loginUser = async (req, res) =>{
         const payload = {id: user._id, name: user.username};
         const token = jwt.sign(payload, process.env.TOKEN_SECRET, {expiresIn: "1d"});
 
-        res.json({token});
+        res.json({token, uname: user.username});
         
     }catch(err){
         res.status(400).json({msg: err.message});
@@ -61,12 +61,12 @@ const verifyUser = async (req, res) =>{
 
             const user = await User.findById(verified.id);
 
-            if(!user) return res.send(false);
+            if(!user) return res.send(null);
 
-            return res.send(true);
+            return res.json(verified.name);
         })
     }catch(err){
-        res.status(400).json({msg: err.message});
+        res.status(400).send(null);
     }
 }
 
