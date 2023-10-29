@@ -15,9 +15,9 @@ function App() {
         <Switch>
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
-          <ProtectedRoute path='/' component={<Home/>}/>
-          <ProtectedRoute path='/create' component={<CreateNote/>}/>
-          <ProtectedRoute path='/edit' component={<EditNote/>}/>
+          <ProtectedRoute path='/' component={Home}/>
+          <ProtectedRoute path='/create' component={CreateNote}/>
+          <ProtectedRoute path='/edit' component={EditNote}/>
         </Switch>
       </Routes>
     </AuthProvider>
