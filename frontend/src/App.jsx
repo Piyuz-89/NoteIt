@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react'
-import {Routes, Route, Switch} from 'react-router-dom'
+import {Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./components/auth/Auth"
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import axios from 'axios';
 
+import Register from './components/login/Register';
+import Login from './components/login/Login';
+import Navigation from './components/Navbar';
+
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
   return (
     <AuthProvider>
-      <Navbar/>
+      <Navigation/>
       <Routes>
-        <Switch>
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
-          <ProtectedRoute path='/' component={Home}/>
+          {/* <ProtectedRoute path='/home' component={Home}/>
           <ProtectedRoute path='/create' component={CreateNote}/>
-          <ProtectedRoute path='/edit' component={EditNote}/>
-        </Switch>
+          <ProtectedRoute path='/edit' component={EditNote}/> */}
       </Routes>
     </AuthProvider>
   )
