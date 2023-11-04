@@ -1,7 +1,8 @@
 import React from 'react';
-import {Formik, Field} from 'formik';
+import {useNavigate} from 'react-router-dom';
+import {Formik, Field, Form} from 'formik';
 import * as Yup from 'yup';
-import {Container, Form, Button} from 'react-bootstrap';
+import {Container} from 'react-bootstrap';
 
 const FormSchema = Yup.object().shape({
     email: Yup
@@ -11,37 +12,50 @@ const FormSchema = Yup.object().shape({
     pass: Yup
         .string()
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-            "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit and one special character."),
+            "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit and one special character.")
+            .required("Required!"),
 })
 
 const Login = () =>{
+
+    const navigate = useNavigate();
+
     const handleFormSubmit = (values) => {
+        navigate("/register");
         alert(JSON.stringify(values, null, 2));
+
     }
 
     return (
+
         <Container className='d-flex justify-content-center'>
+
             <Formik
                 initialValues={{
                     email:"",
                     pass:""
                 }}
+
                 validationSchema={FormSchema}
-                onSubmit={handleFormSubmit}>
-                {({errors, values, handleChange, handleSubmit})=>(
-                    <Form className='col-5' onSubmit={handleSubmit}>
-                        <Form.Group>
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type='email' name='email' value={values.email} onChange={handleChange}/>
-                            {/* <Field type='email' name='email' /> */}
-                            {errors.email && <Form.Text className='text-danger'>{errors.email}</Form.Text>}
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type='password' name='pass' value={values.pass} onChange={handleChange}/>
-                            {errors.pass && <Form.Text className='text-danger' muted>{errors.pass}</Form.Text>}
-                        </Form.Group>
-                        <Button type='submit'>Submit</Button>
+                onSubmit={handleFormSubmit}
+            >
+                {({errors})=>(
+                    <Form className='col-5 mt-5 bg-light rounded p-5 fw-semibold'>
+                        <h1 className='text-center fw-bold text-success '>Login </h1>
+                        <div className="form-group mb-3">
+                            <label htmlFor="email" className="form-label">Email ID</label>
+                            <Field type="email" id="email" name='email' className="form-control" />
+                            {errors.email && <p className="form-text text-danger">{errors.email}</p> }
+                        </div>
+
+                        <div className="form-group mb-3">
+                            <label htmlFor="password" className="form-label">Password</label>
+                            <Field type='password' id='password' name='pass' className="form-control" />
+                            {errors.pass && <p className="form-text text-danger">{errors.pass}</p> }
+                        </div>
+
+                        <button type='submit' className='btn btn-success mt-2'>Login</button>
+                        
                     </Form>
                 )}
                 

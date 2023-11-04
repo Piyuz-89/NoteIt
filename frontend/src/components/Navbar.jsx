@@ -5,13 +5,14 @@ import { useAuth } from "./auth/Auth";
 
 function Navigation(){
     const navigate = useNavigate();
-    const {user} = useAuth;
+    const {user, logout} = useAuth;
 
     const handleClick = () =>{
         if(user){
             alert("Logout");
+            logout();
+            navigate("/login");
         }else{
-            alert("Login");
             navigate("/login");
         }
     }
@@ -19,12 +20,12 @@ function Navigation(){
     return (
         <Navbar bg="dark" data-bs-theme="dark">
             <Container>
-            <Navbar.Brand href="/">Note-It</Navbar.Brand>
+            <Navbar.Brand href="/register" className="fw-bold fs-4 text-warning">Note-It</Navbar.Brand>
             <Nav className="me-auto">
                 <Nav.Link href="/edit">Create</Nav.Link>
             </Nav>
             <Nav>
-            <Nav.Link onClick={handleClick}>{user ? "Logout" : "Login"}</Nav.Link>
+            <Nav.Link onClick={handleClick} className="fw-semibold text-light">{user ? "Logout" : "Login"}</Nav.Link>
           </Nav>
             </Container>
         </Navbar>
