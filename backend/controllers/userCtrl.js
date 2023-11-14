@@ -5,23 +5,25 @@ const jwt = require("jsonwebtoken");
 const registerUser = async (req, res) =>{
 
     try{
-        const {name, email, password} = req.body;
-        const user = User.findOne({email: email});
-        if(user){
-            return res.status(400).json({msg: "Email already exist"});
-        }
 
-        const hashpass = await bcrypt.hash(password, 10);
-        await User.create({
-            username: name,
-            email: email,
-            password: hashpass
-        });
+        console.log(req.body);
+        // const {name, email, password} = req.body;
+        // const user = User.findOne({email: email});
+        // if(user){
+        //     return res.status(400).json({msg: "Email already exist"});
+        // }
 
-        res.status(200).json({msg: "User registered successfully"});
+        // const hashpass = await bcrypt.hash(password, 10);
+        // await User.create({
+        //     username: name,
+        //     email: email,
+        //     password: hashpass
+        // });
+
+        res.status(200).json({msg: "Registration Successfull!"});
 
     }catch(err){
-        return res.status(500).json({msg: err.message});
+        return res.status(500).json({msg: "Registration Failed!"});
     }
 }
 
@@ -32,7 +34,7 @@ const loginUser = async (req, res) =>{
         const user = await User.findOne({email: email});
 
         if(!user){
-            return res.status(400).json({msg:"User does not exist"});
+            return res.status(400).json({msg:"Invalid Email!"});
         }
 
         const isValid = bcrypt.compare(password, user.password);
@@ -43,10 +45,10 @@ const loginUser = async (req, res) =>{
         const payload = {id: user._id, name: user.username};
         const token = jwt.sign(payload, process.env.TOKEN_SECRET, {expiresIn: "1d"});
 
-        res.json({token, uname: user.username});
-        
+        res.status(200).json({token, uname: user.username});
+
     }catch(err){
-        res.status(400).json({msg: err.message});
+        res.status(400).json({msg: "Login Failed!"});
     }
 
 }

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {Formik, Field, Form} from 'formik';
 import * as Yup from 'yup';
 import {Container} from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import Loader from '../Loader';
+
 
 const FormSchema = Yup.object().shape({
     email: Yup
@@ -23,12 +28,31 @@ const FormSchema = Yup.object().shape({
 })
 
 const Register = () =>{
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleFormSubmit = (values) => {
-        alert(JSON.stringify(values, null, 2));
+    const navigate = useNavigate();
+
+    const handleFormSubmit = async (values) => {
+
+        setIsLoading(true);
+        
+        axios.post("/api/user/register", values)
+            .then(res=>{
+                setIsLoading(false);
+                navigate("/login");
+                toast.success(res.data.msg);
+            })
+            .catch(err=>{
+                setIsLoading(false);
+                navigate("/register");
+                toast.error(err.response.data.msg);
+            }); 
     }
 
     return (
+        isLoading ? 
+        <Loader/> 
+                :
         <Container className='d-flex justify-content-center'>
             <Formik
                 initialValues={{
@@ -42,7 +66,7 @@ const Register = () =>{
 
                 {({errors})=>(
                     
-                    <Form className='col-5 mt-5 bg-light rounded p-5 fw-semibold'>
+                    <Form className='col-5 mt-5 bg-light rounded p-5 fw-semibold' style={{boxShadow : "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"}}>
                         <h1 className='text-center fw-bold text-success '>Register </h1>
                         <div className="form-group mb-3">
                             <label htmlFor="email" className="form-label">Email ID</label>
