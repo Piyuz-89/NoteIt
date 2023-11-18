@@ -42,8 +42,8 @@ export default function Home() {
         })
             .then((res) => {
                 getNotes(token);
-                navigate("/")
                 setIsLoading(false);
+                navigate("/")
                 toast.success(res.data.msg);
             })
             .catch((err) => {
