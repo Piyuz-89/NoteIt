@@ -35,8 +35,7 @@ export default function Signup(){
     await signUp(values);
     navigate("/login");
   }
-
-
+  
   if (user) return <Navigate to='/'/>
 
   return (
