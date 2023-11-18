@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 
-// connectDB();
+connectDB();
 
 
 app.use("/api/user",userRouter);

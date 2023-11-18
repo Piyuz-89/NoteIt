@@ -1,59 +1,49 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {useNavigate, Navigate} from 'react-router-dom';
 import {Formik, Field, Form} from 'formik';
 import * as Yup from 'yup';
 import {Container} from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import Loader from '../Loader';
 
+import {useAuth} from '../AuthProvider';
+import Loader from './Loader';
 
 const FormSchema = Yup.object().shape({
-    email: Yup
-        .string()
-        .email("Invalid Email")
-        .required("Required!"),
-    uname: Yup
-        .string()
-        .required("Required"),
-    pass: Yup
-        .string()
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-            "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit and one special character.")
-        .required("Required!"),
-    cpass: Yup
-        .string()
-        .required("Required!")
-        .oneOf([Yup.ref('pass'), null], 'Passwords must match'),
+  email: Yup
+      .string()
+      .email("Invalid Email")
+      .required("Required!"),
+  uname: Yup
+      .string()
+      .required("Required"),
+  pass: Yup
+      .string()
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+          "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit and one special character.")
+      .required("Required!"),
+  cpass: Yup
+      .string()
+      .required("Required!")
+      .oneOf([Yup.ref('pass'), null], 'Passwords must match'),
 })
 
-const Register = () =>{
-    const [isLoading, setIsLoading] = useState(false);
+export default function Signup(){
 
-    const navigate = useNavigate();
+  const {signUp, user, isLoading} = useAuth();
+  const navigate = useNavigate();
 
-    const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values) =>{
+    await signUp(values);
+    navigate("/login");
+  }
 
-        setIsLoading(true);
-        
-        axios.post("/api/user/register", values)
-            .then(res=>{
-                setIsLoading(false);
-                navigate("/login");
-                toast.success(res.data.msg);
-            })
-            .catch(err=>{
-                setIsLoading(false);
-                navigate("/register");
-                toast.error(err.response.data.msg);
-            }); 
-    }
 
-    return (
-        isLoading ? 
-        <Loader/> 
-                :
-        <Container className='d-flex justify-content-center'>
+  if (user) return <Navigate to='/'/>
+
+  return (
+    isLoading ?
+    <Loader/>
+    :
+    <Container className='d-flex justify-content-center'>
             <Formik
                 initialValues={{
                     email:"",
@@ -64,7 +54,7 @@ const Register = () =>{
                 validationSchema={FormSchema}
                 onSubmit={handleFormSubmit}>
 
-                {({errors})=>(
+                {({errors, isValid, isSubmitting})=>(
                     
                     <Form className='col-5 mt-5 bg-light rounded p-5 fw-semibold' style={{boxShadow : "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)"}}>
                         <h1 className='text-center fw-bold text-success '>Register </h1>
@@ -92,14 +82,12 @@ const Register = () =>{
                             {errors.cpass && <p className="form-text text-danger">{errors.cpass}</p> }
                         </div>
 
-                        <button type='submit' className='btn btn-success mt-2'>Register</button>
+                        <button type='submit'  disabled={!isValid || isSubmitting} className='btn btn-success mt-2'>Register</button>
                         
                     </Form>
                 )}
                 
             </Formik>
         </Container>
-    )
+  )
 }
-
-export default Register;

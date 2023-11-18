@@ -1,7 +1,7 @@
 import React from "react";
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, Link} from 'react-router-dom';
 import { Container, Navbar, Nav } from "react-bootstrap";
-import { useAuth } from "./auth/Auth";
+import {useAuth} from '../AuthProvider';
 
 function Navigation(){
     const navigate = useNavigate();
@@ -19,9 +19,10 @@ function Navigation(){
     return (
         <Navbar bg="dark" data-bs-theme="dark">
             <Container>
-            <Navbar.Brand href="/" className="fw-bold fs-4 text-warning">Note-It</Navbar.Brand>
+            {/* <Navbar.Brand href="/" className="fw-bold fs-4 text-warning">Note-It</Navbar.Brand> */}
+            <Link to="/" className="navbar-brand fw-bold fs-4 text-warning">NoteIt</Link>
             <Nav className="me-auto">
-                {user && <Nav.Link href="/create">Create</Nav.Link>}
+                {user && <Link to='/create' className="nav-link">Create</Link> }
             </Nav>
             <Nav>
             <Nav.Link onClick={handleClick} className="fw-semibold text-light">{user ? "Logout" : "Login"}</Nav.Link>

@@ -1,36 +1,33 @@
-import { useEffect, useState } from 'react'
-import {Routes, Route} from 'react-router-dom'
-import { AuthProvider } from "./components/auth/Auth"
-import ProtectedRoute from './components/auth/ProtectedRoute';
-
-import Register from './components/login/Register';
-import Login from './components/login/Login';
-import Navigation from './components/Navbar';
+import "./App.css";
+import {Routes,Route} from 'react-router-dom';
 import Home from './components/Home';
-import CreateNote from './components/note/CreateNote';
-import EditNote from './components/note/EditNote';
-import Toast from './components/Toast';
+import Login from './components/Login';
+import Signup from "./components/Signup";
+import ProtectedRoute from "./ProtectedRoute";
+import Create from './components/Create';
+import Navigation from "./components/Navbar";
+import Edit from "./components/Edit";
+import Toast from "./components/Toast";
+import Error from "./Error";
 
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
-function App() {
-
+export default function App() {
   return (
-    <AuthProvider>
-      <Navigation/>
-      <Routes>
-          <Route path='/login' element={<Login/>} />
-          <Route path='/register' element={<Register/>} />
-          <Route element={<ProtectedRoute/>}>
-            <Route path='/' element={<Home/>} /> 
-            <Route path='/create' element={<CreateNote/>} />
-            <Route path='/edit/:id' element={<EditNote/>} />
-          </Route>    
-      </Routes>
-      <Toast />
-    </AuthProvider>
-  )
+    <>
+    <Navigation />
+    <Routes>
+      <Route path='/login' element={<Login/>} />
+      <Route path='/register' element={<Signup/>} />
+      <Route element={<ProtectedRoute/>}>
+        <Route path='/' element={<Home/>} />
+        <Route path='/create' element={<Create/>} />
+        <Route path='/edit/:id' element={<Edit/>} />
+      </Route> 
+      <Route path="*" element={<Error/>}/>
+    </Routes>
+    <Toast/>
+    </>
+  );
 }
-
-export default App
